@@ -10,14 +10,15 @@ class ValidateAddrSpec
   end
 
   def valid?(email)
-    # @ is only once
+    # @が一個もない
+    return false unless email.include?("@")
     splited = email.split("@")
-    return false if splited.length != 2
+    domain = splited[-1]
+    local = splited[0...-1].join("@")
 
-    local, domain = splited
     # Domain part assertion
     # D1 && D5
-    return false unless /[\w\d!\#$%&'\*\+-\/=?^_`{|}~\.]+/ === domain
+    return false unless /^[\w\d!\#$%&'\*\+-\/=\?\^_`{|}~\.]+$/ === domain
     # D2
     return false if domain[0] == "."
     # D3
@@ -27,17 +28,24 @@ class ValidateAddrSpec
 
     # Local part assertion
     # L1
+    # if /^"
+    puts local
     dotatom?(local) || quotedstr?(local)
   end
 
   def dotatom?(local)
-    return false unless /[\w\d!\#$%&'\*\+-\/=?^_`{|}~\.]+/ === local
+    return false unless /^[\w\d!\#$%&'\*\+-\/=\?\^_`{|}~\.]+$/ === local
     return false if local[0] == "."
+    return false if local[-1] == "."
+    return false if /\.\./ === local
     true
   end
 
   def quotedstr?(local)
-    false
+    # LQ1 && LQ2
+    return true if local == ""
+    return false unless /^"[\w\d!\#$%&'\*\+-\/=\?\^_`{|}~\(\),\.:;<>@\[\]"\\]+"$/ === local
+    true
   end
 
 end
