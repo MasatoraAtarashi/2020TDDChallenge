@@ -10,6 +10,23 @@ class ValidateAddrSpec
   end
 
   def valid?(email)
-    true
+    # @ is only once
+    splited = email.split("@")
+    return false if split.length != 2
+
+    local, domain = splited
+    # Domain part assertion
+    # D1
+    return false if domain.match?(/[\w\d!\#$%&'\*\+-\/=?^_`{|}~\.]+/)
+    # D2
+    return false if domain[0]
+    # D3
+    return false if domain[-1]
+    # D4
+    # D5
+
+    # Local part assertion
+    # L1
+
   end
 end
