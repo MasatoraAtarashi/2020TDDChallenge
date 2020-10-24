@@ -1,3 +1,4 @@
+# coding: utf-8
 class Era
   @@era_names = {
       reiwa: "令和",
@@ -9,6 +10,19 @@ class Era
       heisei: Time.new(1989, 1, 8),
       showa: Time.new(1926, 12, 25)
   }
+  def convert_from_std()
+    lines = $stdin.read.split("\n")
+    lines.each do |line|
+      (puts "error"; next) if line.empty?
+      year, month, day = line.split("/").map(&:to_i)
+      begin
+        puts calc(year, month, day)
+      rescue ArgumentError
+        puts "error"
+      end
+    end
+  end
+
   def calc(year, month, day)
     target_date = Time.new(year, month, day)
     raise ArgumentError if target_date < @@era_start_date[:showa]
@@ -30,3 +44,6 @@ class Era
     (year - era_start_year) == 0 ? "元" : (year - era_start_year + 1).to_s
   end
 end
+
+era = Era.new
+era.convert_from_std

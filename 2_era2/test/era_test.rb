@@ -1,6 +1,7 @@
+# coding: utf-8
 require 'minitest/autorun'
 require_relative '../../test_helper.rb'
-require_relative '../lib/era.rb'
+require_relative '../lib/convert_era.rb'
 
 class EraTest < Minitest::Test
   def setup
