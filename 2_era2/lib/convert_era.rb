@@ -12,15 +12,24 @@ class Era
   }
   def convert_from_std()
     lines = $stdin.read.split("\n")
+    outputs = convert_lines(lines)
+    outputs.each do |line|
+      puts line
+    end
+  end
+
+  def convert_lines(lines)
+    results = []
     lines.each do |line|
-      (puts "error"; next) if line.empty?
+      (results.push("error"); next) if line.empty?
       year, month, day = line.split("/").map(&:to_i)
       begin
-        puts calc(year, month, day)
+        results.push(calc(year, month, day))
       rescue ArgumentError
-        puts "error"
+        results.push("error")
       end
     end
+    results
   end
 
   def calc(year, month, day)
@@ -44,6 +53,3 @@ class Era
     (year - era_start_year) == 0 ? "元" : (year - era_start_year + 1).to_s
   end
 end
-
-era = Era.new
-era.convert_from_std
